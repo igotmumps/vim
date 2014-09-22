@@ -7,6 +7,9 @@
 set nocp
 filetype plugin on
 
+"Use comma as leader
+let mapleader = ','
+
 " Turn on Syntax Highlighting
 syntax on
 
@@ -51,11 +54,11 @@ let g:screen_size_restore_pos = 1
 " === Theme Config ===
 " -------------------------------------------------------------------------
 
-colo solarized
+colo desert
 
 " GVIM config
 if has("gui_running")
-	colo zenburn
+	colo desert
 	" set gvim window size
 	set lines=100 columns=120
 	if screen_size_restore_pos
@@ -109,6 +112,9 @@ au filetype mumps set suffixesadd=.m                               " Routine nam
 au filetype mumps set includeexpr=substitute(v:fname,'\%','_','g') " Translate % to _
 " Remove comma as a valid file name b/c in includes D ^XUP,PSS^DEE as one.
 au filetype mumps set isfname=@,48-57,/,.,-,_,+,#,$,%,~,=
+au filetype mumps source ~/.vim/scripts/gtm-tools.vim
+au filetype mumps nmap GD GDump
+au filetype mumps nmap GF GFind
 
 " Omni complete
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -119,7 +125,6 @@ autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 source ~/.vim/scripts/m-ctags.vim
 " source ~/.vim/scripts/m-gdump.vim
 source ~/.vim/scripts/m-datetime.vim
-source ~/.vim/scripts/m-tools.vim
 " source ~/.vim/scripts/m-setpath.vim
 
 " autocmd BufEnter *.m call MapTags()
@@ -134,8 +139,6 @@ source ~/.vim/scripts/m-tools.vim
 "----------------------------------------------------------------
 " === Functions and Key Bindings ===
 "----------------------------------------------------------------
-"Use comma as leader
-let mapleader = ','
 
 " Remap new tab
 nmap <Leader>t <ESC>:tabnew<CR>
@@ -144,6 +147,7 @@ nmap <Leader>tp <ESC>:tabprev<CR>
 nmap <Leader>tf <ESC>:tabfirst<CR>
 nmap <Leader>tl <ESC>:tablast<CR>
 nmap <Leader>tc <ESC>:tabclose<CR>
+nnoremap <Leader>c <ESC>:<Leader>cc<CR>
 
 "Toggle Syntax
 function! ToggleSyntax()
@@ -162,9 +166,13 @@ nmap <silent> <c-h> :wincmd h<CR>
 nmap <silent> <c-l> :wincmd l<CR>
 
 
-nmap <silent> <Leader>s :call ToggleSyntax()<CR>
+nnoremap <silent> <Leader>s :call ToggleSyntax()<CR>
 nmap <silent> <Leader>ev <ESC>:e $MYVIMRC<CR>
 nmap <silent> <Leader>nt <ESC>:NERDTreeToggle ./<CR>
 nnoremap <silen> <Leader>+ :exe "vertical resize 80"
 nnoremap <silent> <Leader>d2u <ESC>:%s/{Ctrl+V}{Ctrl+M}//<CR>
 
+let g:NERDCustomDelimiters = {'mumps': { 'left': ';'}}
+
+
+vnoremap <Leader>c <Plug>NERDCommenterComment
