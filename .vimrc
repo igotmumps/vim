@@ -13,6 +13,12 @@ let mapleader = ','
 " Turn on Syntax Highlighting
 syntax on
 
+" Turn on Color Column
+"highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+"match OverLength /\>%80v.\+/
+highlight ColorColumn ctermbg=red
+call matchadd('ColorColumn','\%81v',100)
+
 " Autoindent
 set ai
 
@@ -122,6 +128,11 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 
+augroup VimReload
+autocmd!
+	autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup end
+
 source ~/.vim/scripts/m-ctags.vim
 " source ~/.vim/scripts/m-gdump.vim
 source ~/.vim/scripts/m-datetime.vim
@@ -168,11 +179,17 @@ nmap <silent> <c-l> :wincmd l<CR>
 
 nnoremap <silent> <Leader>s :call ToggleSyntax()<CR>
 nmap <silent> <Leader>ev <ESC>:e $MYVIMRC<CR>
+
 nmap <silent> <Leader>nt <ESC>:NERDTreeToggle ./<CR>
 nnoremap <silen> <Leader>+ :exe "vertical resize 80"
+
 nnoremap <silent> <Leader>d2u <ESC>:%s/{Ctrl+V}{Ctrl+M}//<CR>
+
+" Back up current file
+nmap BB [Back up current file] :!bak -q %<CR><CR>:echomsg "Backed up" expand('%')<CR>
 
 let g:NERDCustomDelimiters = {'mumps': { 'left': ';'}}
 
 
 vnoremap <Leader>c <Plug>NERDCommenterComment
+set fileformats=unix,dos
